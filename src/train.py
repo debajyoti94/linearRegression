@@ -1,0 +1,1 @@
+''' In this .py file we will create functions for training the model and retrieving the loss value'''
