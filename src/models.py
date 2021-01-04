@@ -2,15 +2,14 @@
 - Gradient descent technique'''
 
 
-from config import learning_rate,num_of_epochs, model_name_OLS, model_name_GD
+from config import num_of_epochs
 import numpy as np
 
 class LinearRegressionFromScratch:
 
     def __init__(self):
         self.num_of_epochs = num_of_epochs
-        self.model_name_OLS = model_name_OLS
-        self.model_name_GD = model_name_GD
+
 
     def lr_normal_equation(self, wine_input_features, wine_quality_ouput):
         '''
@@ -24,7 +23,7 @@ class LinearRegressionFromScratch:
         y = wine_quality_ouput.to_numpy()
 
         #applying the normal equation below @ is used for matrix multiplication
-        theta = np.linalg.inv(X.T@X)@X@y
+        theta = np.linalg.inv(X.T@X)@X.T@y
 
         return theta
 
