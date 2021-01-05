@@ -11,7 +11,7 @@ class LinearRegressionFromScratch:
         self.num_of_epochs = num_of_epochs
 
 
-    def lr_normal_equation(self, wine_input_features, wine_quality_ouput):
+    def lr_normal_equation(self, wine_input_features, wine_quality_output):
         '''
         theta = (X^T*X)^-1*X*y, this is the normal equation
         :param wine_input_features: the input features
@@ -20,11 +20,13 @@ class LinearRegressionFromScratch:
         '''
         # converting the dataframe to numpy array
         X = wine_input_features.to_numpy()
-        y = wine_quality_ouput.to_numpy()
+        print("Inside normal equation function:{}".format(type(wine_quality_output)))
+        y = wine_quality_output.to_numpy()
+        print("Inside normal equation function:{}".format(type(y)))
 
         #applying the normal equation below @ is used for matrix multiplication
         theta = np.linalg.inv(X.T@X)@X.T@y
-
+        print(theta.shape)
         return theta
 
 
@@ -41,24 +43,34 @@ class LinearRegressionFromScratch:
 
         return np.sum(squared_errors)/(2*len(wine_quality_output))
 
-    def lr_gradient_descent(self, wine_input_features, wine_quality_output, lr):
+    def lr_gradient_descent(self, wine_input_features, wine_quality_output, theta, lr):
         '''
-        function for gradient descent
+
         :param wine_input_features:
         :param wine_quality_output:
-        :param lr: learning rate
+        :param theta:
+        :param lr:
         :return:
         '''
+        # print(wine_input_features.shape)
+        # print(wine_quality_output.shape)
         X = wine_input_features.to_numpy()
         y = wine_quality_output.to_numpy()
 
         cost_history = np.zeros(self.num_of_epochs)  # create a vector to store the cost history
         m = y.size  # number of training examples
-
+        theta = np.zeros(wine_input_features.shape[1])
+        # print(m)
         for i in range(self.num_of_epochs):
+            print("Epoch {}...".format(i))
             predictions = np.dot(X, theta)
+            # print(theta)
+            # print(predictions.shape)
+            # print(predictions.reshape(predictions.shape[0], -1).shape)
+            answer = predictions - y
+            # print(answer.shape)
             theta = theta - lr * (1.0 / m) * np.dot(X.T, predictions - y)
-            cost_history[i] = self.cost(theta, X, y)  # compute and record the cost
+            cost_history[i] = self.cost_function(theta, X, y)  # compute and record the cost
 
         return theta, cost_history
 
