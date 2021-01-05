@@ -11,13 +11,16 @@ from config import train_set, test_set
 def make_loss_plots(X, y, lr_obj):
     '''
 
-    :param X:
-    :param y:
-    :param lr_obj:
-    :return:
+    :param X: input features
+    :param y: ouput wine quality
+    :param lr_obj: linear regression object for calling the
+    function of gradient descent
+    :return: model parameters (theta)
     '''
 
-    learning_rates = [0.05, 0.005, 0.0005]
+    # tried these following learning rates
+    # learning_rates = [0.05, 0.005, 0.0005]
+    learning_rates = [0.05]
     print(type(y))
     for lr in learning_rates:
         theta, cost_history = lr_obj.lr_gradient_descent(X, y, 0, lr)
@@ -35,6 +38,7 @@ if __name__ == "__main__":
     # print("here")
     # first we get the data
     dp_obj = DataPreprocessing()
+    # print(dir(dp_obj))
     raw_data = dp_obj.load_data(train_set)
     scaled_data = dp_obj.feature_scaling_data(raw_data)
 
@@ -63,13 +67,44 @@ if __name__ == "__main__":
         model_parameters_normal_equation = lr_obj.lr_normal_equation(X_train, y_train)
 
         # pickling the model parameters
-        dp_obj.pickle_dump_data(model_parameters_normal_equation, 'OLS')
-        print(model_parameters_normal_equation)
+        dp_obj.pickle_dump_model(model_parameters_normal_equation, 'OLS')
+
     elif args.train == "GD":
         # then we make the plots
         # print(type(y_train))
         print("GD")
         model_parameters_GD = make_loss_plots(X_train, y_train, lr_obj)
 
-        dp_obj.pickle_dump_data(model_parameters_GD, 'GD')
+        dp_obj.pickle_dump_model(model_parameters_GD, 'GD')
 
+    elif args.test == "OLS":
+        print("Model evaluation using parameters from OLS")
+        # firstly load the parameters
+        theta = dp_obj.load_pickled_file('OLS')
+
+        # load the test set
+        wine_test_set = dp_obj.load_data(test_set)
+
+        # here obtain the loss value
+        X_test = wine_test_set.loc[:, wine_test_set.columns != dp_obj.output_feature]
+        y_test = wine_test_set[dp_obj.output_feature]
+
+        MSE_test = lr_obj.cost_function(theta=theta, wine_input_features=X_test,
+                                        wine_quality_output=y_test)
+        print("MSE loss using OLS = {}".format(MSE_test))
+
+    elif args.test == "GD":
+        print("Model evaluation using parameters obtained from GD")
+        # load the parameters
+        theta = dp_obj.load_pickled_file('GD')
+
+        #once the parameters are obtained, next we have to load the test set
+        wine_test_set = dp_obj.load_data(test_set)
+
+        # here obtain the loss value
+        X_test = wine_test_set.loc[:, wine_test_set.columns != dp_obj.output_feature]
+        y_test = wine_test_set[dp_obj.output_feature]
+
+        MSE_test = lr_obj.cost_function(theta=theta, wine_input_features=X_test,
+                                        wine_quality_output=y_test)
+        print("MSE loss using GD = {}".format(MSE_test))
