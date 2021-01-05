@@ -8,7 +8,7 @@ import pickle  # FOR OBJECT SERIALIZATION
 from sklearn.preprocessing import MinMaxScaler  # THIS IS FOR FEATURE SCALING OPS
 from config import model_name_GD, model_name_OLS
 
-class DataPreprocessing(object):
+class DataPreprocessing:
     def __init__(self):
         """
         constructor, setting up the minmax scaler here
@@ -45,8 +45,8 @@ class DataPreprocessing(object):
     def pickle_dump_model(self, file, model_option):
         '''
 
-        :param file:
-        :param model_option:
+        :param file: file to dump
+        :param model_option: whether it is obtained from OLS/GD
         :return:
         '''
         if model_option == 'OLS':
@@ -62,8 +62,8 @@ class DataPreprocessing(object):
     def load_pickled_file(self, model_option):
         '''
 
-        :param model_option:
-        :return:
+        :param model_option: OLS/GD model parameters
+        :return: theta
         '''
         if model_option == 'OLS':
             with open(self.model_name_OLS, 'rb') as pickle_handle:
