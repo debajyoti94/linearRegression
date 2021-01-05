@@ -3,12 +3,13 @@
 -no need to apply data imputation as there are no missing values
 -also no categorical features were detected during EDA, hence not applying any encoding"""
 
-import pandas as pd  # PANDAS for reading and analyzing the input files
+
 import pickle  # FOR OBJECT SERIALIZATION
 from sklearn.preprocessing import MinMaxScaler  # THIS IS FOR FEATURE SCALING OPS
 from config import model_name_GD, model_name_OLS
 
 class DataPreprocessing:
+
     def __init__(self):
         """
         constructor, setting up the minmax scaler here

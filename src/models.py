@@ -23,7 +23,8 @@ class LinearRegressionFromScratch:
         y = wine_quality_output.to_numpy()
         print("Inside normal equation function:{}".format(type(y)))
 
-        # applying the normal equation below @ is used for matrix multiplication
+        # applying the normal equation
+        # below @ is used for matrix multiplication
         theta = np.linalg.inv(X.T @ X) @ X.T @ y
         print(theta.shape)
         return theta
@@ -41,7 +42,8 @@ class LinearRegressionFromScratch:
 
         return np.sum(squared_errors) / (2 * len(wine_quality_output))
 
-    def lr_gradient_descent(self, wine_input_features, wine_quality_output, theta, lr):
+    def lr_gradient_descent(self, wine_input_features,
+                            wine_quality_output, theta, lr):
         """
 
         :param wine_input_features: X
@@ -60,15 +62,10 @@ class LinearRegressionFromScratch:
         )  # create a vector to store the cost history
         m = y.size  # number of training examples
         theta = np.zeros(wine_input_features.shape[1])
-        # print(m)
+
         for i in range(self.num_of_epochs):
             print("Epoch {}...".format(i))
             predictions = np.dot(X, theta)
-            # print(theta)
-            # print(predictions.shape)
-            # print(predictions.reshape(predictions.shape[0], -1).shape)
-            answer = predictions - y
-            # print(answer.shape)
             theta = theta - lr * (1.0 / m) * np.dot(X.T, predictions - y)
             cost_history[i] = self.cost_function(
                 theta, X, y

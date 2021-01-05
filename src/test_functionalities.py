@@ -1,9 +1,8 @@
 """ This is where we will conduct the unit tests will be done using pytest module"""
 
-import pytest
+
 import pandas as pd
-import pickle
-from config import train_set, test_set
+from config import train_set
 from preprocess import DataPreprocessing
 
 
@@ -28,4 +27,3 @@ class TestFunctions:
         scaled_dataset = dp_obj.feature_scaling_data(dataset)
         if dataset.shape == scaled_dataset.shape:
             assert True
-

@@ -1,4 +1,5 @@
-""" In this .py file we will create functions for training the model and retrieving the loss value
+""" In this .py file we will create functions for training
+the model and retrieving the loss value
 Training curves are plotted here"""
 
 from models import LinearRegressionFromScratch
@@ -34,6 +35,7 @@ def make_loss_plots(X, y, lr_obj):
 
     return theta
 
+
 if __name__ == "__main__":
     # print("here")
     # first we get the data
@@ -50,10 +52,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "--train", type=str, help="Provide an option for training the model. OLS/GD"
+        "--train", type=str,
+        help="Provide an option for training the model. OLS/GD"
     )
     parser.add_argument(
-        "--test", type=str, help="Parameters of OLS/GD? Provide an option"
+        "--test", type=str,
+        help="Parameters of OLS/GD? Provide an option"
     )
 
     args = parser.parse_args()
@@ -64,7 +68,8 @@ if __name__ == "__main__":
         # next pass the data to the model
         print("OLS")
         # print(type(y_train))
-        model_parameters_normal_equation = lr_obj.lr_normal_equation(X_train, y_train)
+        model_parameters_normal_equation = lr_obj.lr_normal_equation(X_train,
+                                                                     y_train)
 
         # pickling the model parameters
         dp_obj.pickle_dump_model(model_parameters_normal_equation, 'OLS')
@@ -89,7 +94,8 @@ if __name__ == "__main__":
         X_test = wine_test_set.loc[:, wine_test_set.columns != dp_obj.output_feature]
         y_test = wine_test_set[dp_obj.output_feature]
 
-        MSE_test = lr_obj.cost_function(theta=theta, wine_input_features=X_test,
+        MSE_test = lr_obj.cost_function(theta=theta,
+                                        wine_input_features=X_test,
                                         wine_quality_output=y_test)
         print("MSE loss using OLS = {}".format(MSE_test))
 
@@ -98,13 +104,15 @@ if __name__ == "__main__":
         # load the parameters
         theta = dp_obj.load_pickled_file('GD')
 
-        #once the parameters are obtained, next we have to load the test set
+        # once the parameters are obtained, next we have to load the test set
         wine_test_set = dp_obj.load_data(test_set)
 
         # here obtain the loss value
         X_test = wine_test_set.loc[:, wine_test_set.columns != dp_obj.output_feature]
         y_test = wine_test_set[dp_obj.output_feature]
 
-        MSE_test = lr_obj.cost_function(theta=theta, wine_input_features=X_test,
+        MSE_test = lr_obj.cost_function(theta=theta,
+                                        wine_input_features=X_test,
                                         wine_quality_output=y_test)
+
         print("MSE loss using GD = {}".format(MSE_test))
