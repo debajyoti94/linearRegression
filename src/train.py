@@ -7,15 +7,19 @@ from matplotlib import pyplot as plt
 from preprocess import DataPreprocessing
 from config import train_set, test_set
 
-def make_loss_plots(X, y):
-    learning_rates = [0.000008, 0.000005, 0.00001]
+def make_loss_plots(X, y, lr_obj):
+    learning_rates = [0.05, 0.005, 0.0005]
+    print(type(y))
     for lr in learning_rates:
-        _, cost_history = LinearRegressionFromScratch.lr_gradient_descent(X, y, 0, lr)
+        _, cost_history = lr_obj.lr_gradient_descent(X, y, 0, lr)
         plt.plot(cost_history, linewidth=2)
-    plt.title("Gradient descent with different learning rates", fontsize=16)
-    plt.xlabel("number of iterations", fontsize=14)
-    plt.ylabel("cost", fontsize=14)
+    plt.title("Gradient descent with different Learning Rates", fontsize=16)
+    plt.xlabel("Number of iterations", fontsize=14)
+    plt.ylabel("Cost", fontsize=14)
+    plt.grid()
     plt.legend(list(map(str, learning_rates)))
+    plt.savefig('../plots/Different_learning_rates_gradient_descent.png')
+
 
 
 if __name__ == '__main__':
@@ -27,23 +31,26 @@ if __name__ == '__main__':
 
     X_train = scaled_data.loc[:,scaled_data.columns != dp_obj.output_feature]
     y_train = scaled_data[dp_obj.output_feature]
+    # print(type(y_train))
 
     # adding commandline arguments
-    # parser = argparse.ArgumentParser()
-    #
-    # parser.add_argument("OLS")
-    # parser.add_argument("GD")
-    #
-    # args = parser.parse_args()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("--option", type=str, help="Provide an option for training the model. OLS/GD")
+
+    args = parser.parse_args()
     # print(args)
     lr_obj = LinearRegressionFromScratch()
 
-    # if args.OLS:
+    if args.option == 'OLS':
         # next pass the data to the model
-    print("OLS")
-    model_parameters_normal_equation = lr_obj.lr_normal_equation(X_train, y_train)
-    print(model_parameters_normal_equation)
-    # elif args.GD:
+        print("OLS")
+        # print(type(y_train))
+        model_parameters_normal_equation = lr_obj.lr_normal_equation(X_train, y_train)
+        print(model_parameters_normal_equation)
+    elif args.option == 'GD':
         # then we make the plots
-        # make_loss_plots(X_train, y_train)
+        # print(type(y_train))
+        print("GD")
+        make_loss_plots(X_train, y_train, lr_obj)
 
